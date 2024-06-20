@@ -65,23 +65,49 @@ module Construction-Of-Sublocale (X : Locale (𝓤 ⁺) 𝓤 𝓤) (𝒿 : Nucle
 
 \end{code}
 
-The ordering on `j`-stable opens is the one in `𝒪 X`.
+The ordering on `j`-stable opens is the same as the one from `𝒪 X`.
 
 \begin{code}
 
- _≼_ : Fixset j → Fixset j → Ω 𝓤
- (U , _) ≼ (V , _) = U ≤[ poset-of (𝒪 X) ] V
+ _≤∙_ : Fixset j → Fixset j → Ω 𝓤
+ (U , _) ≤∙ (V , _) = U ≤[ poset-of (𝒪 X) ] V
 
 \end{code}
 
+The top open is the top open of `X`, which is always `j`-stable.
+
 \begin{code}
+
+ open Properties-Of-Nuclei (𝒪 X)
+
+ 𝟏∙ : Fixset j
+ 𝟏∙ = 𝟏[ 𝒪 X ] , nucleus-preserves-top 𝒿
+
+\end{code}
+
+The binary meet of two `j`-stable opens.
+
+\begin{code}
+
+ _∧∙_ : Fixset j → Fixset j → Fixset j
+ (U , p) ∧∙ (V , q) = (U ∧[ 𝒪 X ] V) , †
+  where
+   † : is-[ j ]-stable (U ∧[ 𝒪 X ] V)
+   † = j (U ∧[ 𝒪 X ] V)   ＝⟨ Ⅰ ⟩
+       j U ∧[ 𝒪 X ] j V   ＝⟨ Ⅱ ⟩
+       U ∧[ 𝒪 X ] j V     ＝⟨ Ⅲ ⟩
+       U ∧[ 𝒪 X ] V       ∎
+        where
+         Ⅰ = 𝓃₃ (𝒪 X) 𝒿 U V
+         Ⅱ = ap (λ - → - ∧[ 𝒪 X ] j V) p
+         Ⅲ = ap (λ - → U ∧[ 𝒪 X ] -) q
 
 \end{code}
 
 \begin{code}
 
  fixset-frame-structure : frame-structure 𝓤 𝓤 (Fixset j)
- fixset-frame-structure = (_≼_ , {!!} , {!!}) , {!!}
+ fixset-frame-structure = (_≤∙_ , 𝟏∙ , {!!}) , {!!}
 
  sublocale : Locale (𝓤 ⁺) 𝓤 𝓤
  sublocale =
